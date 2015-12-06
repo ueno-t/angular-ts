@@ -1,0 +1,29 @@
+{
+  "name": "angular-ts",
+  "version": "0.0.1",
+  "description": "angular with typescript",
+  "main": "index.js",
+  "scripts": {
+    "start": "gulp watch",
+    "test": "gulp test",
+    "build": "gulp compile",
+    "clean": "gulp clean"
+  },
+  "author": "ueno-t",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ueno-t/angular-ts.git"
+  },
+  "dependencies": {
+    "angular": "^1.4.8"
+  },
+  "devDependencies": {
+    "del": "^2.1.0",
+    "gulp": "^3.9.0",
+    "gulp-tsd": "0.0.4",
+    "gulp-typescript": "^2.10.0",
+    "tsd": "^0.6.5",
+    "typescript": "^1.7.3"
+  }
+}

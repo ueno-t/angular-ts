@@ -1,0 +1,19 @@
+{
+  "version":  "1.4.8",
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true
+  },
+  "filesGlob": [
+    "./src/**/*.ts",
+    "!./node_modules/**/*/ts"
+  ],
+  "files": [
+    "core.ts",
+    "tsc.ts"
+  ]
+}
