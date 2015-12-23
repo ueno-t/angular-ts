@@ -25,6 +25,7 @@ class Game {
     this.size  = def.size;
     this.gene  = 0;
     this.board = this.deepCopy(def);
+    this.nestedLoop(this.size, (i ,j) => {this.neighbors(i, j)}); // 初回近傍設定<
   }
 
   nestedLoop(size: number, func: Function) {
@@ -39,20 +40,20 @@ class Game {
     return copied;
   }
   neighbors(i: number, j: number) {
-    var neighbors: Cell[] = new Array();
+    if (this.board[i][j].neighbors === 0) return; // 近傍がなければ再計算しない
+    var neighbors: number = 0;
     for (var row = i-1; row <= i+1; row++) {
       for (var col = j-1; col <= j+1; col++) {
-        if (this.board[i][j].survive === 0) continue; // 近傍がなければ再計算しない
         if ((0<=row&&0<=col)&&!(row==i&&col==j)&&(row<this.size&&col<this.size)) {
-          neighbors.push(this.board[row][col]);
+          if (this.board[row][col].alive) neighbors++;
         }
       }
     }
     this.board[i][j].neighbors = neighbors;
+    this.board[i][j].next();
   }
   reload() {
     this.nestedLoop(this.size, (i ,j) => {this.neighbors(i, j)}); // 近傍設定
-    this.nestedLoop(this.size, (i, j) => {this.board[i][j].next();}); // 次世代計算
     this.nestedLoop(this.size, (i, j) => {this.board[i][j].commit();}); // コミット
     this.gene++;
   }
@@ -61,22 +62,16 @@ class Game {
 class Cell {
   alive    : boolean;
   reserve  : boolean;
-  neighbors: Cell[];
-  survive  : number;
+  neighbors: number;
 
   constructor(alive: boolean) {
     this.alive = alive;
   }
 
   next() {
-    this.survive = this.neighbors.filter((n) => {return n.alive}).length;
-    this.reserve = this.alive ? this.isAlive(this.survive) : this.isBirth(this.survive);
-  }
-  isBirth(survive:number): boolean {
-    return (!this.alive && survive === 3);
-  }
-  isAlive(survive:number): boolean {
-    return (this.alive && (survive === 2 || survive === 3));
+    this.reserve = this.alive
+    ? (this.neighbors === 2 || this.neighbors === 3) // 生存
+    : (this.neighbors === 3);                        // 誕生
   }
   commit() {
     this.alive = this.reserve;

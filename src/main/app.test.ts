@@ -1,7 +1,7 @@
 /// <reference path="app.ts"/>
 
 function testgame() {
-  var def = new GameDefinition(500);
+  var def = new GameDefinition(1024);
   def.board[1][1].alive = true;
   def.board[1][2].alive = true;
   def.board[1][3].alive = true;
@@ -22,8 +22,6 @@ function testgame() {
   assert(game.board[2][1].alive, false);
   assert(game.board[2][2].alive, true);
   assert(game.board[2][3].alive, false);
-  console.log(game);
-  console.log(def);
 }
 
 function assert(actual, expected) {
