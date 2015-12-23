@@ -7,7 +7,6 @@ var del  = require('del');
 var config = {
   paths: {
     src: './src',
-    build: './build',
     release: './release'
   },
   files: {
@@ -31,3 +30,5 @@ gulp.task('watch', function() {
   var tsconf = require(config.files.tsconfig);
   gulp.watch(tsconf.filesGlob, ['compile']);
 });
+
+gulp.task('default', ['watch']);

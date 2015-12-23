@@ -19,11 +19,14 @@
     "angular": "^1.4.8"
   },
   "devDependencies": {
-    "del": "^2.1.0",
+    "del": "^2.2.0",
     "gulp": "^3.9.0",
-    "gulp-tsd": "0.0.4",
     "gulp-typescript": "^2.10.0",
+    "lodash": "^3.10.1",
+    "mocha": "^2.3.4",
+    "object-assign": "^4.0.1",
+    "readable-stream": "^2.0.5",
     "tsd": "^0.6.5",
-    "typescript": "^1.7.3"
+    "typescript": "^1.7.5"
   }
 }
