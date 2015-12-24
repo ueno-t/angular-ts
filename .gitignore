@@ -27,4 +27,4 @@ release
 node_modules
 
 # tsd
-# src/typings
+src/typings
