@@ -10,9 +10,6 @@
     },
     "jquery/jquery.d.ts": {
       "commit": "d8359c5a99c7965a51dcf0e26b65170f2c53af80"
-    },
-    "mocha/mocha.d.ts": {
-      "commit": "d8359c5a99c7965a51dcf0e26b65170f2c53af80"
     }
   }
 }

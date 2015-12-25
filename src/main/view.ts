@@ -1,62 +1,80 @@
 /// <reference path="app.ts"/>
-var def: GameDefinition;
-var game: Game;
-var canvas:HTMLCanvasElement;
-var context:any;
-var cellsize:number = 8;
-var buttonNext: any;
-var buttonAuto: any;
-var running: boolean;
-var timer:any;
+var def       : GameDefinition;
+var game      : Game;
+var boardsize : number = 64;
+var cellsize  : number = 12;
+
+var canvas    : HTMLCanvasElement;
+var context   : CanvasRenderingContext2D;
+var buttonNext: HTMLButtonElement;
+var buttonAuto: HTMLButtonElement;
+var counter   : HTMLParagraphElement;
+
+var running   : boolean;
+var timer     : number;
 
 class Board {
 
   constructor() {
-    canvas    = <HTMLCanvasElement>document.querySelector("canvas");
-    context   = canvas.getContext("2d");
-
-    def  = new GameDefinition(64);
+    def  = new GameDefinition(boardsize);
     game = new Game(def);
 
-    buttonNext = document.getElementById('buttonNext');
+    // ボタン
+    buttonNext = <HTMLButtonElement>document.getElementById('buttonNext');
     buttonNext.addEventListener('click', next, false);
-    buttonAuto = document.getElementById('buttonAuto');
+    buttonAuto = <HTMLButtonElement>document.getElementById('buttonAuto');
     buttonAuto.addEventListener('click', auto, false);
 
+    // カウンタ
+    counter = <HTMLParagraphElement> document.createElement("p");
+    counter.textContent = "gene: " + game.gene.toString();
+    document.body.appendChild(counter);
+
+    // キャンバス
+    canvas    = <HTMLCanvasElement>document.createElement("canvas");
+    context   = canvas.getContext("2d");
+    canvas.width  = boardsize * cellsize;
+    canvas.height = boardsize * cellsize;
+    canvas.addEventListener('click', canvasClick, false);
+    document.body.appendChild(canvas);
+
+    // 描画
     context.fillStyle = 'rgb(60, 60, 60)';
     context.fillRect(0, 0, canvas.width, canvas.height);
-
     nestedLoop(def.size, (i:number ,j:number) => {drawCell(game.board[i][j])});
-    canvas.addEventListener('click', canvasClick, false);
   }
 }
 
-function canvasClick(e:any) {
-    var x = e.clientX - canvas.offsetLeft;
-    var y = e.clientY - canvas.offsetTop;
-    var row = Math.floor(x / cellsize);
-    var col = Math.floor(y / cellsize);
-    var c: Cell = game.board[col][row];
-    c.alive = c.alive ? false : true;
-    drawCell(c);
-}
 function drawCell(c: Cell) {
   context.fillStyle = c.alive ? 'rgb(156, 255,0)' : 'rgb(40,40,40)';
   context.fillRect(c.col*cellsize , c.row*cellsize, cellsize-1, cellsize-1);
 }
-function auto() {
-  if (running) {
-    clearInterval(timer);
-    running = false;
-  } else {
-    next();
-    timer = setInterval('next()', 200);
-    running = true;
-  }
+function canvasClick(e:any) {
+  var rect = e.target.getBoundingClientRect();
+  var x = e.clientX - rect.left;
+  var y = e.clientY - rect.top;
+  var row = Math.floor(x / cellsize);
+  var col = Math.floor(y / cellsize);
+  var c   = game.board[col][row];
+  c.alive = c.alive ? false : true;
+  drawCell(c);
 }
 function next() {
   game.reload();
   nestedLoop(def.size, (i:number ,j:number) => {drawCell(game.board[i][j])});
+  counter.textContent = "gene: " + game.gene.toString();
+}
+function auto() {
+  if (running) {
+    clearInterval(timer);
+    buttonAuto.value = "start"
+    running = false;
+  } else {
+    next();
+    timer = setInterval('next()', 200);
+    buttonAuto.value = "stop"
+    running = true;
+  }
 }
 function exec() {
   var board = new Board();
